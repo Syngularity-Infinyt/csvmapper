@@ -6,10 +6,11 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Created by syngu on 2016-10-15.
+ * Created by syngu on 2016-12-04.
  */
-@Target({ElementType.METHOD, ElementType.FIELD})
+@Target({ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CsvColumn {
-    String value() default "";
+public @interface CsvOrder {
+    String[] value();
 }
+

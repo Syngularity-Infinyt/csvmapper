@@ -12,7 +12,7 @@ import java.lang.reflect.Method;
 public class Column {
     private String name;
     private Method method;
-    private CsvSerializer serializer;
+    private CsvSerializer serializer = null;
 
     public String getName() {
         return name;
@@ -32,10 +32,6 @@ public class Column {
 
     public CsvSerializer getSerializer() {
         return serializer;
-    }
-
-    public void setSerializer(CsvSerializer serializer) {
-        this.serializer = serializer;
     }
 
     public void setSerializer(CsvSerialize serializer) throws ColumnCreateException {

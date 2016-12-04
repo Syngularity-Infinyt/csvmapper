@@ -9,7 +9,4 @@ public class NotAnnotatedException extends RuntimeException {
         super(message);
     }
 
-    public NotAnnotatedException(String message, Throwable cause) {
-        super(message, cause);
-    }
 }
