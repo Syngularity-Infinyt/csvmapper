@@ -5,9 +5,7 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.util.Collection;
 
-/**
- * Created by syngu on 2016-10-16.
- */
+
 public interface CsvWriter<T> {
 
     byte[] writeBytes(Collection<T> ts);

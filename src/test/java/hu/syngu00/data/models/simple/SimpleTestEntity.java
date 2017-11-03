@@ -2,12 +2,10 @@ package hu.syngu00.data.models.simple;
 
 import hu.syngu00.data.annotations.CsvColumn;
 
-/**
- * Created by syngu on 2016-12-04.
- */
+
 public class SimpleTestEntity {
 
-    @CsvColumn
+    @CsvColumn(encaper = "'", encapsulate = true)
     private int num;
 
     @CsvColumn

@@ -11,9 +11,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-/**
- * Created by syngu on 2016-12-04.
- */
 public class SerializeTest {
 
     @Test
@@ -23,8 +20,8 @@ public class SerializeTest {
         String out = "date\n1993-09-21 02:00";
 
         CsvWriter<SerializeTestEntity> writer = new CsvWriterBuilder.BeanBuilder<>(SerializeTestEntity.class)
-                .setWithHeader(true)
-                .build();
+            .setWithHeader(true)
+            .build();
         Assert.assertEquals(out, writer.writeString(data));
     }
 
@@ -34,8 +31,8 @@ public class SerializeTest {
         data.add(new SerializeTestEntity(null));
 
         CsvWriter<SerializeTestEntity> writer = new CsvWriterBuilder.BeanBuilder<>(SerializeTestEntity.class)
-                .setWithHeader(true)
-                .build();
+            .setWithHeader(true)
+            .build();
         Assert.assertEquals("date\n", writer.writeString(data));
     }
 
@@ -44,8 +41,8 @@ public class SerializeTest {
         Collection<SerializeInvalidType> data = new ArrayList<>();
         data.add(new SerializeInvalidType(""));
         CsvWriter<SerializeInvalidType> writer = new CsvWriterBuilder.BeanBuilder<>(SerializeInvalidType.class)
-                .setWithHeader(true)
-                .build();
+            .setWithHeader(true)
+            .build();
         writer.writeString(data);
     }
 

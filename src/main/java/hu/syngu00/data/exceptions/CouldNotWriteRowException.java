@@ -1,11 +1,20 @@
 package hu.syngu00.data.exceptions;
 
-/**
- * Created by syngu on 2016-10-16.
- */
 public class CouldNotWriteRowException extends RuntimeException {
+
+    public CouldNotWriteRowException(String message) {
+        super(message);
+    }
 
     public CouldNotWriteRowException(String message, Throwable cause) {
         super(message, cause);
+    }
+
+    public CouldNotWriteRowException(Throwable cause) {
+        super(cause);
+    }
+
+    public CouldNotWriteRowException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

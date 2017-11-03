@@ -1,81 +1,106 @@
 package hu.syngu00.data;
 
 import hu.syngu00.data.mappers.CsvBeanMapper;
-import hu.syngu00.data.mappers.CsvMapper;
 import hu.syngu00.data.mappers.CsvSimpleMapper;
 import hu.syngu00.data.models.Scheme;
 import hu.syngu00.data.writers.CsvSchemaWriter;
 import hu.syngu00.data.writers.CsvWriter;
 
-/**
- * Created by syngu on 2016-12-04.
- */
+import java.nio.charset.Charset;
+
 public class CsvWriterBuilder {
 
-    public static class SimpleBuilder<SOURCE> {
+    private CsvWriterBuilder() {
+    }
 
-        private final Class<SOURCE> sourceClazz;
-        private String separator = ",";
-        private boolean withHeader = false;
+    public static class SimpleBuilder<S> {
 
-        public SimpleBuilder(Class<SOURCE> sourceClazz) {
+        protected final Class<S> sourceClazz;
+        protected String separator = ",";
+        protected boolean withHeader = false;
+        protected Charset charset = Charset.forName("UTF-8");
+
+        public SimpleBuilder(Class<S> sourceClazz) {
             this.sourceClazz = sourceClazz;
         }
 
-        public SimpleBuilder setSeparator(String separator) {
+        public SimpleBuilder<S> setCharset(Charset charset) {
+            this.charset = charset;
+            return this;
+        }
+
+        public SimpleBuilder<S> setCharset(String charset) {
+            this.charset = Charset.forName(charset);
+            return this;
+        }
+
+        public SimpleBuilder<S> setSeparator(String separator) {
             this.separator = separator;
             return this;
         }
 
-        public SimpleBuilder setWithHeader(boolean withHeader) {
+        public SimpleBuilder<S> setWithHeader(boolean withHeader) {
             this.withHeader = withHeader;
             return this;
         }
 
-        public CsvWriter<SOURCE> build() {
-            CsvMapper<SOURCE> mapper = new CsvSimpleMapper<>(this.sourceClazz);
+        public CsvWriter<S> build() {
+            CsvSimpleMapper<S> mapper = new CsvSimpleMapper<>(this.sourceClazz);
             Scheme scheme = mapper.getSchema();
             scheme.setSeparator(this.separator);
             scheme.setWithHeader(this.withHeader);
-            return new CsvSchemaWriter<SOURCE>(scheme);
+            scheme.setCharset(this.charset);
+            return new CsvSchemaWriter<>(scheme);
         }
     }
 
 
-    public static class BeanBuilder<SOURCE> {
-        private final Class<SOURCE> sourceClazz;
-        private Class mixinClazz = null;
+    public static class BeanBuilder<S> {
 
-        private String separator = ",";
-        private boolean withHeader = false;
+        protected final Class<S> sourceClazz;
+        protected String separator = ",";
+        protected boolean withHeader = false;
+        protected Charset charset = Charset.forName("UTF-8");
+        private Class<?> mixinClazz = null;
 
-        public BeanBuilder(Class<SOURCE> sourceClazz) {
+        public BeanBuilder(Class<S> sourceClazz) {
             this.sourceClazz = sourceClazz;
         }
 
-        public BeanBuilder addMixin(Class mixinClazz) {
+        public BeanBuilder<S> setMixin(Class mixinClazz) {
             this.mixinClazz = mixinClazz;
             return this;
         }
 
-        public BeanBuilder setSeparator(String separator) {
+        public BeanBuilder<S> setCharset(Charset charset) {
+            this.charset = charset;
+            return this;
+        }
+
+        public BeanBuilder<S> setCharset(String charset) {
+            this.charset = Charset.forName(charset);
+            return this;
+        }
+
+        public BeanBuilder<S> setSeparator(String separator) {
             this.separator = separator;
             return this;
         }
 
-        public BeanBuilder setWithHeader(boolean withHeader) {
+        public BeanBuilder<S> setWithHeader(boolean withHeader) {
             this.withHeader = withHeader;
             return this;
         }
 
-        @SuppressWarnings("unchecked")
-        public CsvWriter<SOURCE> build() {
-            CsvBeanMapper<SOURCE> mapper = new CsvBeanMapper<>(this.sourceClazz);
+        public CsvWriter<S> build() {
+            CsvBeanMapper<S> mapper = new CsvBeanMapper<>(this.sourceClazz);
             mapper.addMixIn(mixinClazz);
             Scheme scheme = mapper.getSchema();
             scheme.setSeparator(this.separator);
             scheme.setWithHeader(this.withHeader);
+            scheme.setCharset(this.charset);
             return new CsvSchemaWriter<>(scheme);
         }
+
     }
 }

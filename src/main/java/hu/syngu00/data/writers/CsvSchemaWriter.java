@@ -14,9 +14,7 @@ import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
 import java.util.Collection;
 
-/**
- * Created by syngu on 2016-10-16.
- */
+
 public class CsvSchemaWriter<T> implements CsvWriter<T> {
     private final Scheme scheme;
 
@@ -39,7 +37,7 @@ public class CsvSchemaWriter<T> implements CsvWriter<T> {
             builder.deleteCharAt(builder.length() - 1);
         }
 
-        return builder.toString().getBytes();
+        return builder.toString().getBytes(scheme.getCharset());
     }
 
     @Override
@@ -57,7 +55,7 @@ public class CsvSchemaWriter<T> implements CsvWriter<T> {
         Files.write(path, writeBytes(ts), StandardOpenOption.CREATE);
     }
 
-    private String writeHeader() {
+    private StringBuilder writeHeader() {
         StringBuilder builder = new StringBuilder();
 
         for (Column column : scheme.getColumns()) {
@@ -66,29 +64,47 @@ public class CsvSchemaWriter<T> implements CsvWriter<T> {
 
         builder.deleteCharAt(builder.length() - 1);
         builder.append('\n');
-        return builder.toString();
+        return builder;
     }
 
-    private String writeRow(T t) {
+    private StringBuilder writeRow(T t) {
         StringBuilder builder = new StringBuilder();
+        if (t == null) {
+            return builder;
+        }
 
         for (Column column : scheme.getColumns()) {
-            if (column.isSerialized()) {
-                builder.append(invokeSerializer(column, t)).append(scheme.getSeparator());
-            } else {
-                if (t == null) {
-                    builder.append("").append(scheme.getSeparator());
-                }
-                builder.append(invokeMethod(column.getMethod(), t)).append(scheme.getSeparator());
-            }
+            builder.append(writeColumn(column, t));
         }
 
         builder.deleteCharAt(builder.length() - 1);
         builder.append('\n');
-        return builder.toString();
+        return builder;
     }
 
-    private Object invokeMethod(Method method, Object object) throws CouldNotWriteRowException {
+    private StringBuilder writeColumn(Column column, T t) {
+        StringBuilder builder = new StringBuilder();
+
+        if (column.isSerialized()) {
+            builder.append(invokeSerializer(column, t));
+        } else {
+            Object o = invokeMethod(column.getMethod(), t);
+            if (o == null) {
+                builder.append("");
+            } else {
+                builder.append(invokeMethod(column.getMethod(), t));
+            }
+        }
+
+        if (column.isEncapsulate()) {
+            builder.insert(0, column.getEncaper()).append(column.getEncaper());
+        }
+
+        builder.append(scheme.getSeparator());
+        return builder;
+    }
+
+    private Object invokeMethod(Method method, Object object) {
         try {
             return method.invoke(object);
         } catch (IllegalAccessException | InvocationTargetException e) {
@@ -96,11 +112,12 @@ public class CsvSchemaWriter<T> implements CsvWriter<T> {
         }
     }
 
-    private Object invokeSerializer(Column column, T t) throws SerializeTypeMissMatchException {
+    @SuppressWarnings("unchecked")
+    private Object invokeSerializer(Column column, T t) {
         try {
             return column.getSerializer().serialize(invokeMethod(column.getMethod(), t));
         } catch (ClassCastException e) {
-            throw new SerializeTypeMissMatchException(column.getSerializer().getClass().getName() + "serialize(T t) don't accept type " + invokeMethod(column.getMethod(), t).getClass().getName());
+            throw new SerializeTypeMissMatchException(column.getSerializer().getClass().getName() + "serialize(T t) don't accept type " + invokeMethod(column.getMethod(), t).getClass().getName(), e);
         }
     }
 

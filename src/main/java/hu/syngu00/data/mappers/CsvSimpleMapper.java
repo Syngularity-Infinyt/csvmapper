@@ -7,14 +7,11 @@ import hu.syngu00.data.models.Scheme;
 
 import java.lang.reflect.Field;
 
-/**
- * Created by syngu on 2016-10-16.
- */
-public class CsvSimpleMapper<SOURCE> implements CsvMapper<SOURCE> {
+public class CsvSimpleMapper<S> implements CsvMapper {
 
-    private Class<SOURCE> sourceClazz;
+    private Class<S> sourceClazz;
 
-    public CsvSimpleMapper(Class<SOURCE> sourceClazz) {
+    public CsvSimpleMapper(Class<S> sourceClazz) {
         this.sourceClazz = sourceClazz;
     }
 
@@ -38,7 +35,7 @@ public class CsvSimpleMapper<SOURCE> implements CsvMapper<SOURCE> {
             try {
                 column.setMethod(this.sourceClazz.getMethod(current.getType().equals(boolean.class) ? "is" + methodName : "get" + methodName));
             } catch (NoSuchMethodException e) {
-                throw new ColumnCreateException("class " + this.sourceClazz.getName() + " has no method named " + (current.getType().equals(boolean.class) ? "is" + methodName : "get" + methodName));
+                throw new ColumnCreateException("class " + this.sourceClazz.getName() + " has no method named " + (current.getType().equals(boolean.class) ? "is" + methodName : "get" + methodName), e);
             }
 
             scheme.addColumn(column);

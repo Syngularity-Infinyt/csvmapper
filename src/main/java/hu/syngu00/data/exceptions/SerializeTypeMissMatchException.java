@@ -1,10 +1,19 @@
 package hu.syngu00.data.exceptions;
 
-/**
- * Created by syngu on 2016-12-04.
- */
 public class SerializeTypeMissMatchException extends RuntimeException {
     public SerializeTypeMissMatchException(String message) {
         super(message);
+    }
+
+    public SerializeTypeMissMatchException(String message, Throwable cause) {
+        super(message, cause);
+    }
+
+    public SerializeTypeMissMatchException(Throwable cause) {
+        super(cause);
+    }
+
+    public SerializeTypeMissMatchException(String message, Throwable cause, boolean enableSuppression, boolean writableStackTrace) {
+        super(message, cause, enableSuppression, writableStackTrace);
     }
 }

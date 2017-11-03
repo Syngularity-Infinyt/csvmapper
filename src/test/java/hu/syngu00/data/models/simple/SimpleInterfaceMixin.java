@@ -3,12 +3,12 @@ package hu.syngu00.data.models.simple;
 import hu.syngu00.data.annotations.CsvColumn;
 import hu.syngu00.data.annotations.CsvOrder;
 
-/**
- * Created by syngu on 2016-12-04.
- */
+
 @CsvOrder({"num", "value", "name"})
 public interface SimpleInterfaceMixin {
-    @CsvColumn("num")
+
+
+    @CsvColumn(value = "num", encaper = "'", encapsulate = true)
     int getNum();
 
     @CsvColumn("value")

@@ -6,9 +6,6 @@ import hu.syngu00.data.serialize.CsvDateTimeSerializer;
 
 import java.util.Date;
 
-/**
- * Created by syngu on 2016-12-04.
- */
 public class SerializeTestEntity {
     @CsvColumn
     @CsvSerialize(CsvDateTimeSerializer.class)

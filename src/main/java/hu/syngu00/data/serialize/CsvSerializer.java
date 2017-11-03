@@ -1,8 +1,6 @@
 package hu.syngu00.data.serialize;
 
-/**
- * Created by syngu on 2016-10-15.
- */
+@FunctionalInterface
 public interface CsvSerializer<T> {
     String serialize(T t);
 }

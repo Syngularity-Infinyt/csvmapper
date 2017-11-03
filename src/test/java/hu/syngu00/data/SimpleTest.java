@@ -11,9 +11,6 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * Created by syngu on 2016-12-04.
- */
 public class SimpleTest {
 
     private static final String outputWithOutHeader = "1,true,random\n2,false,text";
@@ -36,8 +33,8 @@ public class SimpleTest {
     @Test
     public void simpleWriterWithHeaderTest() throws Exception {
         CsvWriter<SimpleTestEntity> writer = new CsvWriterBuilder.SimpleBuilder<>(SimpleTestEntity.class)
-                .setWithHeader(true)
-                .build();
+            .setWithHeader(true)
+            .build();
         Assert.assertEquals(outputWithHeader, writer.writeString(data));
     }
 
@@ -57,17 +54,17 @@ public class SimpleTest {
     @Test
     public void simpleWriterSeparatorTest() throws Exception {
         CsvWriter<SimpleTestEntity> writer = new CsvWriterBuilder.SimpleBuilder<>(SimpleTestEntity.class)
-                .setSeparator(";")
-                .build();
+            .setSeparator(";")
+            .build();
         Assert.assertEquals(outputWithOutHeader.replace(",", ";"), writer.writeString(data));
     }
 
     @Test
     public void simpleWriterWithHeaderAndSeparatorTest() throws Exception {
         CsvWriter<SimpleTestEntity> writer = new CsvWriterBuilder.SimpleBuilder<>(SimpleTestEntity.class)
-                .setSeparator(";")
-                .setWithHeader(true)
-                .build();
+            .setSeparator(";")
+            .setWithHeader(true)
+            .build();
 
         Assert.assertEquals(outputWithHeader.replace(",", ";"), writer.writeString(data));
     }

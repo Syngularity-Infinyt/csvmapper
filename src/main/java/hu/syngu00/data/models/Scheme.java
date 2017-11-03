@@ -2,37 +2,18 @@ package hu.syngu00.data.models;
 
 import hu.syngu00.data.annotations.CsvOrder;
 import hu.syngu00.data.exceptions.ColumnCreateException;
+import lombok.Data;
 
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 
-/**
- * Created by syngu on 2016-10-15.
- */
+@Data
 public class Scheme {
     private Collection<Column> columns = new ArrayList<>();
     private String separator = ",";
     private boolean withHeader = false;
-
-    public String getSeparator() {
-        return separator;
-    }
-
-    public void setSeparator(String separator) {
-        this.separator = separator;
-    }
-
-    public boolean isWithHeader() {
-        return withHeader;
-    }
-
-    public void setWithHeader(boolean withHeader) {
-        this.withHeader = withHeader;
-    }
-
-    public Collection<Column> getColumns() {
-        return columns;
-    }
+    private Charset charset = Charset.forName("UTF-8");
 
     public void addColumn(Column column) {
         this.columns.add(column);
@@ -58,32 +39,12 @@ public class Scheme {
     }
 
     private Column getColumnByName(String name) {
-        Column column_ = null;
+        Column columnTemp = null;
         for (Column column : columns) {
             if (column.getName().equals(name)) {
-                column_ = column;
+                columnTemp = column;
             }
         }
-        return column_;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        Scheme scheme = (Scheme) o;
-
-        if (withHeader != scheme.withHeader) return false;
-        if (!columns.equals(scheme.columns)) return false;
-        return separator.equals(scheme.separator);
-    }
-
-    @Override
-    public int hashCode() {
-        int result = columns.hashCode();
-        result = 31 * result + separator.hashCode();
-        result = 31 * result + (withHeader ? 1 : 0);
-        return result;
+        return columnTemp;
     }
 }

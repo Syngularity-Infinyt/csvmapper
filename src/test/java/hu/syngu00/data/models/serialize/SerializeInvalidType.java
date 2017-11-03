@@ -4,9 +4,6 @@ import hu.syngu00.data.annotations.CsvColumn;
 import hu.syngu00.data.annotations.CsvSerialize;
 import hu.syngu00.data.serialize.CsvDateTimeSerializer;
 
-/**
- * Created by syngu on 2016-12-04.
- */
 public class SerializeInvalidType {
 
     @CsvColumn
